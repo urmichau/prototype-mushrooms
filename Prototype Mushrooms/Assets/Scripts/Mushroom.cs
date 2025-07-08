@@ -24,9 +24,20 @@ public class Mushroom : MonoBehaviour
         transform.position = GetMousePositionInWorldSpace();
     }
 
-    private void OnMousUp()
+    private void OnMouseUp()
     {
+        col.enabled = false;
+        Collider2D hitCollider = Physics2D.OverlapPoint(transform.position);
+        col.enabled = true;
 
+        if(hitCollider != null && hitCollider.TryGetComponent(out IDropArea dropArea)) //checking if it collided with drop area collider
+        {
+            dropArea.OnMushroomDrop(this);
+        }
+        else
+        {
+            transform.position = startDragPosition;
+        }
     }
 
     public Vector3 GetMousePositionInWorldSpace()
